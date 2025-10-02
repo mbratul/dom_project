@@ -86,7 +86,8 @@ function generateToastMessage(message) {
 
 /**
  *  @param {string} color: ;
- *  **/
+ *
+ * **/
 function isValidHex(color) {
   if (color.length !== 7) return false;
   if (color[0] !== "#") return false;
