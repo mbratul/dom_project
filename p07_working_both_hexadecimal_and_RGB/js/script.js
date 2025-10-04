@@ -13,7 +13,6 @@
 
 // Steps
 
-// Step 1 - create onload handler
 window.onload = () => {
   main();
 };
@@ -26,11 +25,15 @@ function main() {
   const btnChange = document.getElementById("change-btn");
   const btnCopy = document.getElementById("copy-btn");
   const output = document.getElementById("output");
+  const output2 = document.getElementById("output2");
 
   btnChange.addEventListener("click", function () {
-    const bgcolor = generateHEXColor();
-    root.style.backgroundColor = bgcolor;
-    output.value = bgcolor.substring(1);
+    const color = generateColorDecimal();
+    const hex = generateHEXColor(color);
+    const rgb = generateRGBColor(color);
+    root.style.backgroundColor = hex;
+    output.value = hex.substring(1);
+    output2.value = rgb;
   });
 
   btnCopy.addEventListener("click", function () {
@@ -57,16 +60,35 @@ function main() {
   });
 }
 
-// step 2 - random color generator function
-function generateHEXColor() {
+//function 1 - generate three random decimal number for red green and blue return as an object
+function generateColorDecimal() {
   const red = Math.floor(Math.random() * 255);
   const green = Math.floor(Math.random() * 255);
   const blue = Math.floor(Math.random() * 255);
-  const hexadecimal = `#${red.toString(16)}${green.toString(16)}${blue.toString(
-    16
+
+  return { red, green, blue };
+}
+
+// function 2 - generate hex color code
+function generateHEXColor({ red, green, blue }) {
+  //const { red, green, blue } = generateColorDecimal();
+
+  const getTwoCode = (value) => {
+    const hex = value.toString(16);
+    return hex.length === 1 ? `0${hex}` : hex;
+  };
+
+  const hexadecimal = `#${getTwoCode(red)}${getTwoCode(green)}${getTwoCode(
+    blue
   )}`;
 
-  return hexadecimal;
+  return hexadecimal.toUpperCase();
+}
+
+//function 3 - generate rgba color code
+function generateRGBColor({ red, green, blue }) {
+  //const { red, green, blue } = generateColorDecimal();
+  return `rgb(${red}, ${green}, ${blue})`;
 }
 
 function generateToastMessage(message) {
@@ -100,6 +122,9 @@ function isValidHex(color) {
   // color = color.substring(1);
   return /^[0-9A-Fa-f]{6}$/i.test(color);
 }
+// Step 1 - create onload handler
+
+// step 2 - random color generator function
 
 // step 3 - collect all necessary references
 
@@ -118,3 +143,7 @@ function isValidHex(color) {
 // step 10 - implement change handler on input field
 
 // step 11 - prevent copying hex code if it is not valid
+
+// step 12 - refactor color generator function
+
+// step 13 - update the color code to display rgb color
