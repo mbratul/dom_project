@@ -7,6 +7,8 @@
  * - Add a button to copy the color code
  * - Add a toast message when copied
  * - User can type their own hex code too
+ * - Show RGB color too, but do not need to edit it.
+ * - User can also copy the RGB color code.
  */
 
 // Steps
