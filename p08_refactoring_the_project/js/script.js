@@ -24,6 +24,7 @@ function main() {
   const root = document.getElementById("root");
   const btnChange = document.getElementById("change-btn");
   const btnCopy = document.getElementById("copy-btn");
+  const btnCopy2 = document.getElementById("copy-btn2");
   const output = document.getElementById("output");
   const output2 = document.getElementById("output2");
 
@@ -48,6 +49,18 @@ function main() {
       alert("Invalid Color Code");
     }
   });
+  btnCopy2.addEventListener("click", function () {
+    navigator.clipboard.writeText(`#${output2.value}`);
+    if (divElem != null) {
+      divElem.remove();
+      divElem = null;
+    }
+    if (isValidHex(output.value)) {
+      generateToastMessage(`#${output2.value} copied`);
+    } else {
+      alert("Invalid Color Code");
+    }
+  });
 
   output.addEventListener("keyup", function (e) {
     const color = e.target.value;
@@ -55,6 +68,7 @@ function main() {
       output.value = color.toUpperCase();
       if (isValidHex(color)) {
         root.style.backgroundColor = `#${color}`;
+        output2.value = hexToRGB(color);
       }
     }
   });
@@ -90,6 +104,19 @@ function generateRGBColor({ red, green, blue }) {
   //const { red, green, blue } = generateColorDecimal();
   return `rgb(${red}, ${green}, ${blue})`;
 }
+/**
+ * convert hex color to rgb
+ * @param {string} hex
+ *
+ * */
+function hexToRGB(hex) {
+  const red = parseInt(hex.slice(0, 2), 16);
+  const green = parseInt(hex.slice(2, 4), 16);
+  const blue = parseInt(hex.slice(4), 16);
+
+  return `rgb(${red}, ${green}, ${blue})`;
+}
+//console.log(hexToRGB("ffffff"));
 
 function generateToastMessage(message) {
   divElem = document.createElement("div");
@@ -147,3 +174,9 @@ function isValidHex(color) {
 // step 12 - refactor color generator function
 
 // step 13 - update the color code to display rgb color
+
+// step 14 - create hex to rgb function
+
+//step 15 - update change handler
+
+//step 16 - implement copy function
