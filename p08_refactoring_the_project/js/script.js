@@ -19,7 +19,18 @@ window.onload = () => {
 
 // global declaration
 let divElem = null;
-
+function clipboardInner(button) {
+  navigator.clipboard.writeText(`#${button.value}`);
+    if (divElem != null) {
+      divElem.remove();
+      divElem = null;
+    }
+    if (isValidHex(output.value)) {
+      generateToastMessage(`#${button.value} copied`);
+    } else {
+      alert("Invalid Color Code");
+    }
+}
 function main() {
   const root = document.getElementById("root");
   const btnChange = document.getElementById("change-btn");
@@ -38,28 +49,11 @@ function main() {
   });
 
   btnCopy.addEventListener("click", function () {
-    navigator.clipboard.writeText(`#${output.value}`);
-    if (divElem != null) {
-      divElem.remove();
-      divElem = null;
-    }
-    if (isValidHex(output.value)) {
-      generateToastMessage(`#${output.value} copied`);
-    } else {
-      alert("Invalid Color Code");
-    }
+    clipboardInner(output)
+    
   });
   btnCopy2.addEventListener("click", function () {
-    navigator.clipboard.writeText(`#${output2.value}`);
-    if (divElem != null) {
-      divElem.remove();
-      divElem = null;
-    }
-    if (isValidHex(output.value)) {
-      generateToastMessage(`#${output2.value} copied`);
-    } else {
-      alert("Invalid Color Code");
-    }
+    clipboardInner(output2)
   });
 
   output.addEventListener("keyup", function (e) {
