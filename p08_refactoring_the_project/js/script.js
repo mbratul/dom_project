@@ -19,17 +19,17 @@ window.onload = () => {
 
 // global declaration
 let divElem = null;
-function clipboardInner(button) {
-  navigator.clipboard.writeText(`#${button.value}`);
-    if (divElem != null) {
-      divElem.remove();
-      divElem = null;
-    }
-    if (isValidHex(output.value)) {
-      generateToastMessage(`#${button.value} copied`);
-    } else {
-      alert("Invalid Color Code");
-    }
+function clipboardInner(message) {
+  navigator.clipboard.writeText(`#${message.value}`);
+  if (divElem != null) {
+    divElem.remove();
+    divElem = null;
+  }
+  if (isValidHex(output.value)) {
+    generateToastMessage(`#${message.value} copied`);
+  } else {
+    alert("Invalid Color Code");
+  }
 }
 function main() {
   const root = document.getElementById("root");
@@ -49,11 +49,10 @@ function main() {
   });
 
   btnCopy.addEventListener("click", function () {
-    clipboardInner(output)
-    
+    clipboardInner(output);
   });
   btnCopy2.addEventListener("click", function () {
-    clipboardInner(output2)
+    clipboardInner(output2);
   });
 
   output.addEventListener("keyup", function (e) {
