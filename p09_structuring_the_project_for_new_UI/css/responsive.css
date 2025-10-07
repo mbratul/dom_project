@@ -1,0 +1,29 @@
+/* Responsive Media Query Goes Here */
+
+/* For Mobile Template */
+@media (max-width: 480px) {
+  body {
+    background-color: #de3249;
+  }
+}
+
+/* For Tablet Template */
+@media (min-width: 481px) and (max-width: 767px) {
+  body {
+    background-color: #32de46;
+  }
+}
+
+/* For Laptop Template */
+@media (min-width: 768px) and (max-width: 1023px) {
+  body {
+    background-color: #5d32de;
+  }
+}
+
+/* For Large Screen Template */
+@media (min-width: 1024px) and (max-width: 1440px) {
+  body {
+    background-color: blue;
+  }
+}
