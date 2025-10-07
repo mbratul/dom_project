@@ -40,20 +40,33 @@ function clipboardInner(element) {
 // main function, this function will take care of getting all the DOM Referrence
 
 function main() {
-  // const root = document.getElementById("root");
-  // const btnChange = document.getElementById("change-btn");
-  // const btnCopy = document.getElementById("copy-btn");
-  // const btnCopy2 = document.getElementById("copy-btn2");
-  // const output = document.getElementById("output");
-  // const output2 = document.getElementById("output2");
-
+  // DOM references
   const generateRandomColorbtn = document.querySelector(
     "#generate-random-color"
   );
+  const colorHexInput = document.querySelector("#input-hex");
+  const colorSliderRed = document.querySelector("#color-slider-red");
+  const colorSliderGreen = document.querySelector("#color-slider-green");
+  const colorSliderBlue = document.querySelector("#color-slider-blue");
 
+  // event listeners
   generateRandomColorbtn.addEventListener(
     "click",
     handlegenerateRandomColorbtn
+  );
+  colorHexInput.addEventListener("keyup", handleColorHexInput);
+
+  colorSliderRed.addEventListener(
+    "change",
+    handleColorSliders(colorSliderRed, colorSliderGreen, colorSliderBlue)
+  );
+  colorSliderGreen.addEventListener(
+    "change",
+    handleColorSliders(colorSliderRed, colorSliderGreen, colorSliderBlue)
+  );
+  colorSliderBlue.addEventListener(
+    "change",
+    handleColorSliders(colorSliderRed, colorSliderGreen, colorSliderBlue)
   );
 
   /* btnCopy.addEventListener("click", function () {
@@ -61,17 +74,6 @@ function main() {
   }); */
   /* btnCopy2.addEventListener("click", function () {
     clipboardInner(output2);
-  }); */
-
-  /* output.addEventListener("keyup", function (e) {
-    const color = e.target.value;
-    if (color) {
-      output.value = color.toUpperCase();
-      if (isValidHex(color)) {
-        root.style.backgroundColor = `#${color}`;
-        output2.value = hexToRGB(color);
-      }
-    }
   }); */
 }
 
@@ -82,6 +84,28 @@ function main() {
 function handlegenerateRandomColorbtn() {
   const color = generateColorDecimal();
   updateColorCodeToDOM(color);
+}
+function handleColorHexInput(e) {
+  const hexColor = e.target.value;
+  if (hexColor) {
+    this.value = hexColor.toUpperCase();
+    if (isValidHex(hexColor)) {
+      const color = hexToDecimalColor(hexColor);
+      updateColorCodeToDOM(color);
+    }
+  }
+}
+
+function handleColorSliders(colorSliderRed, colorSliderGreen, colorSliderBlue) {
+  return function () {
+    const color = {
+      red: parseInt(colorSliderRed.value),
+      green: parseInt(colorSliderGreen.value),
+      blue: parseInt(colorSliderBlue.value),
+    };
+
+    updateColorCodeToDOM(color);
+  };
 }
 
 //DOM functions
@@ -113,9 +137,11 @@ function updateColorCodeToDOM(color) {
   const hexColor = `${generateHEXColor(color)}`;
   const rgbColor = generateRGBColor(color);
 
-  document.querySelector("#color-display").style.backgroundColor = hexColor;
-  document.querySelector("#color-mode-hex").value = hexColor;
-  document.querySelector("#color-mode-rgb").value = rgbColor;
+  document.querySelector(
+    "#color-display"
+  ).style.backgroundColor = `#${hexColor}`;
+  document.querySelector("#input-hex").value = hexColor;
+  document.querySelector("#input-rgb").value = rgbColor;
   document.querySelector("#color-slider-red-label").innerText = color.red;
   document.querySelector("#color-slider-red").value = color.red;
   document.querySelector("#color-slider-green-label").innerText = color.green;
@@ -150,7 +176,7 @@ function generateHEXColor({ red, green, blue }) {
     return hex.length === 1 ? `0${hex}` : hex;
   };
 
-  const hexadecimal = `#${getTwoCode(red)}${getTwoCode(green)}${getTwoCode(
+  const hexadecimal = `${getTwoCode(red)}${getTwoCode(green)}${getTwoCode(
     blue
   )}`;
 
