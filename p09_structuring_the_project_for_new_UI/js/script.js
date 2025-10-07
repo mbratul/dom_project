@@ -10,15 +10,21 @@
  * - Show RGB color too, but do not need to edit it.
  * - User can also copy the RGB color code.
  */
-
+/**
+ * Date 07-10-2025
+ * Author: Ratul
+ * Description: Color Picker Application Refactoring
+ * */
 // Steps
 
+// global declaration
+let divElem = null;
+
+//onload handler
 window.onload = () => {
   main();
 };
 
-// global declaration
-let divElem = null;
 function clipboardInner(element) {
   navigator.clipboard.writeText(`#${element.value}`);
   if (divElem != null) {
@@ -31,31 +37,33 @@ function clipboardInner(element) {
     alert("Invalid Color Code");
   }
 }
+// main function, this function will take care of getting all the DOM Referrence
+
 function main() {
-  const root = document.getElementById("root");
-  const btnChange = document.getElementById("change-btn");
-  const btnCopy = document.getElementById("copy-btn");
-  const btnCopy2 = document.getElementById("copy-btn2");
-  const output = document.getElementById("output");
-  const output2 = document.getElementById("output2");
+  // const root = document.getElementById("root");
+  // const btnChange = document.getElementById("change-btn");
+  // const btnCopy = document.getElementById("copy-btn");
+  // const btnCopy2 = document.getElementById("copy-btn2");
+  // const output = document.getElementById("output");
+  // const output2 = document.getElementById("output2");
 
-  btnChange.addEventListener("click", function () {
-    const color = generateColorDecimal();
-    const hex = generateHEXColor(color);
-    const rgb = generateRGBColor(color);
-    root.style.backgroundColor = hex;
-    output.value = hex.substring(1);
-    output2.value = rgb;
-  });
+  const generateRandomColorbtn = document.querySelector(
+    "#generate-random-color"
+  );
 
-  btnCopy.addEventListener("click", function () {
+  generateRandomColorbtn.addEventListener(
+    "click",
+    handlegenerateRandomColorbtn
+  );
+
+  /* btnCopy.addEventListener("click", function () {
     clipboardInner(output);
-  });
-  btnCopy2.addEventListener("click", function () {
+  }); */
+  /* btnCopy2.addEventListener("click", function () {
     clipboardInner(output2);
-  });
+  }); */
 
-  output.addEventListener("keyup", function (e) {
+  /* output.addEventListener("keyup", function (e) {
     const color = e.target.value;
     if (color) {
       output.value = color.toUpperCase();
@@ -64,52 +72,19 @@ function main() {
         output2.value = hexToRGB(color);
       }
     }
-  });
+  }); */
 }
 
-//function 1 - generate three random decimal number for red green and blue return as an object
-function generateColorDecimal() {
-  const red = Math.floor(Math.random() * 255);
-  const green = Math.floor(Math.random() * 255);
-  const blue = Math.floor(Math.random() * 255);
-
-  return { red, green, blue };
-}
-
-// function 2 - generate hex color code
-function generateHEXColor({ red, green, blue }) {
-  //const { red, green, blue } = generateColorDecimal();
-
-  const getTwoCode = (value) => {
-    const hex = value.toString(16);
-    return hex.length === 1 ? `0${hex}` : hex;
-  };
-
-  const hexadecimal = `#${getTwoCode(red)}${getTwoCode(green)}${getTwoCode(
-    blue
-  )}`;
-
-  return hexadecimal.toUpperCase();
-}
-
-//function 3 - generate rgba color code
-function generateRGBColor({ red, green, blue }) {
-  //const { red, green, blue } = generateColorDecimal();
-  return `rgb(${red}, ${green}, ${blue})`;
-}
+//Event handlers
 /**
- * convert hex color to rgb
- * @param {string} hex
- *
- * */
-function hexToRGB(hex) {
-  const red = parseInt(hex.slice(0, 2), 16);
-  const green = parseInt(hex.slice(2, 4), 16);
-  const blue = parseInt(hex.slice(4), 16);
-
-  return `rgb(${red}, ${green}, ${blue})`;
+ * generateRandomColorbtn eventlistener function
+ */
+function handlegenerateRandomColorbtn() {
+  const color = generateColorDecimal();
+  updateColorCodeToDOM(color);
 }
-//console.log(hexToRGB("ffffff"));
+
+//DOM functions
 
 function generateToastMessage(message) {
   divElem = document.createElement("div");
@@ -130,10 +105,89 @@ function generateToastMessage(message) {
 
   document.body.appendChild(divElem);
 }
+/**
+ * update DOM elements with calculated color values
+ * @param {object} color
+ */
+function updateColorCodeToDOM(color) {
+  const hexColor = `${generateHEXColor(color)}`;
+  const rgbColor = generateRGBColor(color);
+
+  document.querySelector("#color-display").style.backgroundColor = hexColor;
+  document.querySelector("#color-mode-hex").value = hexColor;
+  document.querySelector("#color-mode-rgb").value = rgbColor;
+  document.querySelector("#color-slider-red-label").innerText = color.red;
+  document.querySelector("#color-slider-red").value = color.red;
+  document.querySelector("#color-slider-green-label").innerText = color.green;
+  document.querySelector("#color-slider-green").value = color.green;
+  document.querySelector("#color-slider-blue-label").innerText = color.blue;
+  document.querySelector("#color-slider-blue").value = color.blue;
+}
+// Utility functions
+/**
+ * genrate and return an object of three color decimal values
+ * @returns
+ */
+
+function generateColorDecimal() {
+  const red = Math.floor(Math.random() * 255);
+  const green = Math.floor(Math.random() * 255);
+  const blue = Math.floor(Math.random() * 255);
+
+  return { red, green, blue };
+}
 
 /**
- *  @param {string} color: ;
+ * take a color object of three decimal values and return a hexadecimal color code
+ * @param {object} color
+ * @returns {string}
+ */
+function generateHEXColor({ red, green, blue }) {
+  //const { red, green, blue } = generateColorDecimal();
+
+  const getTwoCode = (value) => {
+    const hex = value.toString(16);
+    return hex.length === 1 ? `0${hex}` : hex;
+  };
+
+  const hexadecimal = `#${getTwoCode(red)}${getTwoCode(green)}${getTwoCode(
+    blue
+  )}`;
+
+  return hexadecimal.toUpperCase();
+}
+
+/**
+ * take a color object of three decimal values and return a RGB color code
+ * @param {object} color
+ * @returns {string}
+ */
+function generateRGBColor({ red, green, blue }) {
+  //const { red, green, blue } = generateColorDecimal();
+  return `rgb(${red}, ${green}, ${blue})`;
+}
+/**
+ * convert hex color to decimal colors object
+ * @param {string} hex
+ * @returns {object}
+ * */
+function hexToDecimalColor(hex) {
+  const red = parseInt(hex.slice(0, 2), 16);
+  const green = parseInt(hex.slice(2, 4), 16);
+  const blue = parseInt(hex.slice(4), 16);
+
+  return {
+    red,
+    green,
+    blue,
+  };
+}
+
+/**
+ * validate hex color code
  *
+ *  @param {string} color: ;
+ * @returns {boolean}
  * **/
 function isValidHex(color) {
   if (color.length !== 6) return false;
@@ -142,6 +196,7 @@ function isValidHex(color) {
   // color = color.substring(1);
   return /^[0-9A-Fa-f]{6}$/i.test(color);
 }
+
 // Step 1 - create onload handler
 
 // step 2 - random color generator function
