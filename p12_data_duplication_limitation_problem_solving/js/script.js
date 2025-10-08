@@ -50,7 +50,7 @@ const defaultPresetColors = [
   "#ccff90",
   "#ffcc80",
 ];
-const customColor = [];
+let customColor = new Array(24);
 const copySound = new Audio("./images/copy-sound.wav");
 
 //onload handler
@@ -60,6 +60,14 @@ window.onload = () => {
   //display preset colors
   const parentBoxes = document.querySelector("#preset-colors");
   displayColorBoxes(parentBoxes, defaultPresetColors);
+
+  let getCustomColors = localStorage.getItem("custom-colors");
+  if (getCustomColors) {
+    displayColorBoxes(
+      document.querySelector("#custom-colors"),
+      JSON.parse(getCustomColors)
+    );
+  }
 };
 
 // main function, this function will take care of getting all the DOM Referrence
@@ -183,11 +191,20 @@ function handlePresetColorParent(event) {
 }
 function handleSaveToCustombtn(customColorParent, inputHex) {
   return function () {
-    customColor.push(`#${inputHex.value}`);
+    let color = `#${inputHex.value}`;
+    if (customColor.includes(color)) {
+      alert("Color already saved in your list");
+      return;
+    }
+    customColor.unshift(color);
+    if (customColor.length > 24) {
+      customColor = customColor.slice(0, 24);
+    }
+    localStorage.setItem("custom-colors", JSON.stringify(customColor));
     removeChildren(customColorParent);
     displayColorBoxes(customColorParent, customColor);
-    copySound.volume = 0.2;
-    copySound.play();
+    /* copySound.volume = 0.2;
+    copySound.play(); */
   };
 }
 
@@ -269,8 +286,10 @@ function generateColorBox(color) {
  */
 function displayColorBoxes(parent, colors) {
   colors.forEach(function (color) {
-    const colorBox = generateColorBox(color);
-    parent.appendChild(colorBox);
+    if (color && isValidHex(color.slice(1))) {
+      const colorBox = generateColorBox(color);
+      parent.appendChild(colorBox);
+    }
   });
 }
 /**
