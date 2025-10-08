@@ -82,6 +82,9 @@ body {
   display: block;
   user-select: none;
 }
+label {
+  user-select: none;
+}
 .mode-radio-group {
   display: flex;
   gap: 1rem;
