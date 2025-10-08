@@ -24,11 +24,41 @@ const defaultColor = {
   green: 222,
   blue: 238,
 };
+const defaultPresetColors = [
+  "#ffcdd2",
+  "#f8bbd0",
+  "#e1bee7",
+  "#ff8a80",
+  "#ff80ab",
+  "#ea80fc",
+  "#b39ddb",
+  "#9fa8da",
+  "#90caf9",
+  "#b388ff",
+  "#8c9eff",
+  "#82b1ff",
+  "#03a9f4",
+  "#00bcd4",
+  "#009688",
+  "#80d8ff",
+  "#84ffff",
+  "#a7ffeb",
+  "#c8e6c9",
+  "#dcedc8",
+  "#f0f4c3",
+  "#b9f6ca",
+  "#ccff90",
+  "#ffcc80",
+];
+const copySound = new Audio("./images/copy-sound.wav");
 
 //onload handler
 window.onload = () => {
   main();
   updateColorCodeToDOM(defaultColor);
+  //display preset colors
+  const parentBoxes = document.querySelector("#preset-colors");
+  displayColorBoxes(parentBoxes, defaultPresetColors);
 };
 
 // main function, this function will take care of getting all the DOM Referrence
@@ -43,6 +73,7 @@ function main() {
   const colorSliderGreen = document.querySelector("#color-slider-green");
   const colorSliderBlue = document.querySelector("#color-slider-blue");
   const copyTOClipboardbtn = document.querySelector("#copy-to-clipboard");
+  const presetColorParent = document.querySelector("#preset-colors");
 
   // event listeners
   generateRandomColorbtn.addEventListener(
@@ -65,6 +96,8 @@ function main() {
   );
 
   copyTOClipboardbtn.addEventListener("click", handleCopyTOClipBoard);
+
+  presetColorParent.addEventListener("click", handlePresetColorParent);
 }
 
 //Event handlers
@@ -127,6 +160,18 @@ function handleCopyTOClipBoard() {
   }
 }
 
+function handlePresetColorParent(event) {
+  const child = event.target;
+  if (child.className === "color-box") {
+    navigator.clipboard.writeText(child.getAttribute("data-color"));
+    copySound.volume = 0.2;
+    copySound.play();
+    generateToastMessage(
+      `${child.getAttribute("data-color").toUpperCase()} Copied`
+    );
+  }
+}
+
 //DOM functions
 /**
  * Generate a dynamic DOM element to show a toast message
@@ -185,6 +230,29 @@ function updateColorCodeToDOM(color) {
   document.querySelector("#color-slider-green").value = color.green;
   document.querySelector("#color-slider-blue-label").innerText = color.blue;
   document.querySelector("#color-slider-blue").value = color.blue;
+}
+/**
+ * create a div element with class name color-box
+ * @param {string} color
+ * @returns {object}
+ */
+function generateColorBox(color) {
+  const div = document.createElement("div");
+  div.className = "color-box";
+  div.style.backgroundColor = color;
+  div.setAttribute("data-color", color);
+  return div;
+}
+/**
+ * this function will create and append new color boxes to it's parent
+ * @param {object} parent
+ * @param {Array} colors
+ */
+function displayColorBoxes(parent, colors) {
+  colors.forEach(function (color) {
+    const colorBox = generateColorBox(color);
+    parent.appendChild(colorBox);
+  });
 }
 // Utility functions
 /**
