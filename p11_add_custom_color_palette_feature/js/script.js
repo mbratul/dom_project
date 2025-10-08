@@ -50,6 +50,7 @@ const defaultPresetColors = [
   "#ccff90",
   "#ffcc80",
 ];
+const customColor = [];
 const copySound = new Audio("./images/copy-sound.wav");
 
 //onload handler
@@ -100,6 +101,11 @@ function main() {
   copyTOClipboardbtn.addEventListener("click", handleCopyTOClipBoard);
 
   presetColorParent.addEventListener("click", handlePresetColorParent);
+
+  saveTOCustombtn.addEventListener(
+    "click",
+    handleSaveToCustombtn(customColorParent, colorHexInput)
+  );
 }
 
 //Event handlers
@@ -160,6 +166,8 @@ function handleCopyTOClipBoard() {
       alert("Invalid RGB color");
     }
   }
+  copySound.volume = 0.2;
+  copySound.play();
 }
 
 function handlePresetColorParent(event) {
@@ -172,6 +180,15 @@ function handlePresetColorParent(event) {
       `${child.getAttribute("data-color").toUpperCase()} Copied`
     );
   }
+}
+function handleSaveToCustombtn(customColorParent, inputHex) {
+  return function () {
+    customColor.push(`#${inputHex.value}`);
+    removeChildren(customColorParent);
+    displayColorBoxes(customColorParent, customColor);
+    copySound.volume = 0.2;
+    copySound.play();
+  };
 }
 
 //DOM functions
@@ -255,6 +272,17 @@ function displayColorBoxes(parent, colors) {
     const colorBox = generateColorBox(color);
     parent.appendChild(colorBox);
   });
+}
+/**
+ * remove all children from parent
+ * @param {object} parent
+ */
+function removeChildren(parent) {
+  let child = parent.lastElementChild;
+  while (child) {
+    parent.removeChild(child);
+    child = parent.lastElementChild;
+  }
 }
 // Utility functions
 /**
