@@ -85,6 +85,9 @@ function main() {
   const saveTOCustombtn = document.querySelector("#save-to-custom");
   const presetColorParent = document.querySelector("#preset-colors");
   const customColorParent = document.querySelector("#custom-colors");
+  const bgFileInput = document.querySelector("#bg-file-input");
+  const bgFileInputBtn = document.querySelector("#bg-file-input-btn");
+  const bgPreviewImg = document.querySelector("#bg-preview");
 
   // event listeners
   generateRandomColorbtn.addEventListener(
@@ -110,10 +113,21 @@ function main() {
 
   presetColorParent.addEventListener("click", handlePresetColorParent);
 
+  customColorParent.addEventListener("click", handleCustomColorParent);
+
   saveTOCustombtn.addEventListener(
     "click",
     handleSaveToCustombtn(customColorParent, colorHexInput)
   );
+  bgFileInputBtn.addEventListener("click", function () {
+    bgFileInput.click();
+  });
+  bgFileInput.addEventListener("change", function (event) {
+    const files = event.target.files[0];
+    const imgURL = URL.createObjectURL(files);
+    bgPreviewImg.style.background = `url(${imgURL})`;
+    document.body.style.background = `url(${imgURL})`;
+  });
 }
 
 //Event handlers
@@ -181,9 +195,20 @@ function handleCopyTOClipBoard() {
 function handlePresetColorParent(event) {
   const child = event.target;
   if (child.className === "color-box") {
-    navigator.clipboard.writeText(child.getAttribute("data-color"));
     copySound.volume = 0.2;
     copySound.play();
+    navigator.clipboard.writeText(child.getAttribute("data-color"));
+    generateToastMessage(
+      `${child.getAttribute("data-color").toUpperCase()} Copied`
+    );
+  }
+}
+function handleCustomColorParent(event) {
+  const child = event.target;
+  if (child.className === "color-box") {
+    copySound.volume = 0.2;
+    copySound.play();
+    navigator.clipboard.writeText(child.getAttribute("data-color"));
     generateToastMessage(
       `${child.getAttribute("data-color").toUpperCase()} Copied`
     );
