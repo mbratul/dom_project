@@ -104,12 +104,37 @@ window.onload = function () {
   main();
 };
 function main() {
+  //1st box
   const newQuoteBtn = document.querySelector("#new-quote-btn");
   const quoteBody = document.querySelector("#quote-body");
 
+  //event listener
   newQuoteBtn.addEventListener("click", function () {
     const index = Math.floor(Math.random() * quotes.length);
     const displayQuote = quotes[index];
     quoteBody.innerText = displayQuote;
+  });
+
+  //2nd box
+  const resetBtn = document.querySelector("#reset-btn");
+  const submitBtn = document.querySelector("#submit-btn");
+  const nameInput = document.querySelector("#name-inp");
+  const nameOutput = document.querySelector("#name-output");
+  const resultBody = document.querySelector("#result-body");
+
+  resetBtn.addEventListener("click", function () {
+    nameInput.value = "";
+    resultBody.style.display = "none";
+  });
+
+  submitBtn.addEventListener("click", function () {
+    const userName = nameInput.value;
+    if (!userName) {
+      alert("Please provide a valid name");
+    } else {
+      resultBody.style.display = "block";
+      nameOutput.innerText = userName;
+      nameInput.value = "";
+    }
   });
 }
