@@ -232,7 +232,16 @@ label {
 .delete-btn {
   display: none;
 }
-
+.background-right-panel {
+  padding: 1rem;
+  width: 100%;
+}
+#bg-controller {
+  display: none;
+}
+.select-group {
+  margin-bottom: 1rem;
+}
 .toast-message {
   position: fixed;
   z-index: 999;
