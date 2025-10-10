@@ -85,9 +85,11 @@ function main() {
   const saveTOCustombtn = document.querySelector("#save-to-custom");
   const presetColorParent = document.querySelector("#preset-colors");
   const customColorParent = document.querySelector("#custom-colors");
+  const bgPreviewImg = document.querySelector("#bg-preview");
   const bgFileInput = document.querySelector("#bg-file-input");
   const bgFileInputBtn = document.querySelector("#bg-file-input-btn");
-  const bgPreviewImg = document.querySelector("#bg-preview");
+  const bgFileDeleteBtn = document.querySelector("#bg-file-delete-btn");
+  //bgFileDeleteBtn.style.display = "none";
 
   // event listeners
   generateRandomColorbtn.addEventListener(
@@ -127,6 +129,15 @@ function main() {
     const imgURL = URL.createObjectURL(files);
     bgPreviewImg.style.background = `url(${imgURL})`;
     document.body.style.background = `url(${imgURL})`;
+    bgFileDeleteBtn.style.display = "inline";
+  });
+  bgFileDeleteBtn.addEventListener("click", function () {
+    bgPreviewImg.style.background = "none";
+    bgPreviewImg.style.backgroundColor = "#dddeee";
+    document.body.style.background = "none";
+    bgPreviewImg.style.backgroundColor = "#dddeee";
+    bgFileDeleteBtn.style.display = "none";
+    bgFileInput.value = null;
   });
 }
 

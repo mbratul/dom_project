@@ -229,6 +229,9 @@ label {
   outline: none;
   cursor: pointer;
 }
+.delete-btn {
+  display: none;
+}
 
 .toast-message {
   position: fixed;
